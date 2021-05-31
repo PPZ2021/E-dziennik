@@ -2,11 +2,12 @@ const express = require ("express");
 const path = require ('path');
 const mysql = require ("mysql");
 const dotenv = require ("dotenv");
+const cookieParser = require ("cookie-parser");
 
 dotenv.config({path: './.env'});
 
 const app = express();
-// database
+// database connection
 const dataBase = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
@@ -22,6 +23,7 @@ app.use(express.static(publicDirectory));
 app.use(express.urlencoded({extended: false}));
 //parse json bodies
 app.use(express.json());
+app.use(cookieParser());
 //hbs - template
 app.set("view engine", 'hbs');
 
