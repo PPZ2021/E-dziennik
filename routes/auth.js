@@ -42,13 +42,13 @@ router.post('/', function (req, res, next) {
             req.session.loggedin = true;
             req.session.username = username;
             req.session.role = RODZIC;
-            req.session.userid = idRodzica;
-            res.redirect('/admin');
+            req.session.userid = idRodzica[0].idRodzica;
+            res.redirect('/rodzic');
             //res.end();
             return;
           }
           else{
-            dataBase.query(`SELECT 'idNauczyciela' FROM NauczH WHERE 'loginNauczyciela' = '?' AND 'hashHasła' = '?'`, [username, password], function (error, idNauczyciela) {
+            dataBase.query(`SELECT idNauczyciela FROM NauczH WHERE loginNauczyciela = ? AND hashHasła = ?`, [username, password], function (error, idNauczyciela) {
               if (error) {
                 console.error(error.message);
                 console.error(error);
@@ -59,8 +59,8 @@ router.post('/', function (req, res, next) {
                 req.session.loggedin = true;
                 req.session.username = username;
                 req.session.role = NAUCZYCIEL;
-                req.session.userid = idNauczyciela;
-                res.redirect('/admin');
+                req.session.userid = idNauczyciela[0].idNauczyciela;
+                res.redirect('/nauczyciel');
                 //res.end();
                 return;
               } else {
