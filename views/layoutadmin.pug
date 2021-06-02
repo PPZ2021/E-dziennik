@@ -1,0 +1,31 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/admin.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap')
+    script(src="https://kit.fontawesome.com/d1bc516a2d.js", crossorigin="anonymous")
+    block head
+    
+  body
+    nav.navbar 
+      ul.navbar-nav
+        li.logo
+          a(href='/admin', class='nav-link') 
+            span(class='link-text logo-text') Uczeń
+            i(class='fas fa-angle-double-right')
+        li.nav-item
+          a(class='nav-link', href = '/admin')
+            i(class='fas fa-folder-open fa-menu')
+            span.link-text Content
+        li.nav-item
+          a(class='nav-link', href = '/addContent')
+            i(class='fas fa-project-diagram fa-menu')
+            span.link-text Add content 
+        li.nav-item
+          a(class='nav-link', href = '/logout')
+            i(class='fas fa-sign-out-alt fa-menu')
+            span.link-text Logout
+    main
+      block content

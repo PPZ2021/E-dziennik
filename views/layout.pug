@@ -1,0 +1,38 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap')
+    script(src="https://kit.fontawesome.com/d1bc516a2d.js", crossorigin="anonymous")
+    script(src="/javascripts/load.js")
+    block head
+  body
+    nav.navbar 
+      ul.navbar-nav
+        li.logo
+          a(href='/', class='nav-link') 
+            span(class='link-text logo-text') E-dziennik
+            i(class='fas fa-angle-double-right')
+        li.nav-item
+          a(class='nav-link', href = '/index')
+            i(class='fas fa-home fa-menu')
+            span.link-text Home 
+        li.nav-item
+          a(class='nav-link', href = '/education')
+            i(class='fas fa-graduation-cap fa-menu')
+            span.link-text Education 
+        li.nav-item
+          a(class='nav-link', href = '/projects')
+            i(class='fas fa-project-diagram fa-menu')
+            span.link-text Projects  
+        li.nav-item
+          a(class='nav-link', href = '/technology')
+            i(class='fas fa-laptop-code fa-menu')
+            span.link-text Technology
+        li.nav-item
+          a(class='nav-link', href = '/login')
+            i(class='fas fa-sign-out-alt fa-menu')
+            span.link-text Login
+    main#main
+      block content

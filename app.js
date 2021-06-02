@@ -1,44 +1,63 @@
-const express = require ("express");
-const path = require ('path');
-const mysql = require ("mysql2");
-const dotenv = require ("dotenv");
-const cookieParser = require ("cookie-parser");
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+var session = require('express-session');
+var bodyParser = require('body-parser');
 
-dotenv.config({path: './.env'});
+var indexRouter = require('./routes/index');
+var loginRouter = require('./routes/login');
+var authRouter = require('./routes/auth');
+var uczenRouter = require('./routes/uczen');
+var logoutRouter = require('./routes/logout');
+var loadRouter = require('./routes/load');
+var usersRouter = require('./routes/users');
 
-const app = express();
-// database connection
-const dataBase = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    email: process.env.DATABASE_EMAIL,
-    database: process.env.DATABASE
-});
-// __dirname give access to current directory
-const publicDirectory = path.join(__dirname, './public');
-app.use(express.static(publicDirectory));
+var app = express();
 
-//parse urlencoded bodies(analizuje dane jakie wpisalismy do registera)
-app.use(express.urlencoded({extended: false}));
-//parse json bodies
-app.use(express.json());
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
+
+
+app.use(logger('dev'));
+//app.use(express.json());
+//app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-//hbs - template
-app.set("view engine", 'hbs');
+app.use(express.static(path.join(__dirname, 'public')));
 
-//check if connect to database
-dataBase.connect( (error) => {
-    if(error) {
-        console.log(error)
-    }else{
-        console.log("MYSQL Connected")
-    }
-} )
-//Define routes
-app.use('/', require('./routes/pages'));
-app.use('/auth', require('./routes/auth'));
+app.use('/', loginRouter);
+app.use('/users', usersRouter);
+app.use('/login', loginRouter)
+app.use('/auth', authRouter)
+app.use('/uczen', uczenRouter)
+app.use('/logout', logoutRouter)
+app.use('/load', loadRouter)
 
-app.listen(5000, ()=>{
-    console.log("server started on Port 5000");
-})
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+module.exports = app;
