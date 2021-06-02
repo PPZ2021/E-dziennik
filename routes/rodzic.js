@@ -13,7 +13,8 @@ const dataBase = mysql.createConnection({
 router.get('/', function (req, res, next) {
   if (req.session.loggedin && req.session.role == RODZIC) {
     console.log(req.session.userid);
-    dataBase.query(`SELECT * FROM Rodzic WHERE idRodzica = ?`, [req.session.userid], function (error, rows) {
+    //dataBase.query(`SELECT * FROM Rodzic WHERE idRodzica = ?`, [req.session.userid], function (error, rows) {
+    dataBase.query(`SELECT * FROM  (Rodzic inner join Uczen on Rodzic.Uczen_idUcznia=Uczen.idUcznia)  where idRodzica = ?`, [req.session.userid], function (error, rows) {
       if (error) {
         console.error(error.message);
         console.error(error);

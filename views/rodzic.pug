@@ -2,7 +2,13 @@ extends layoutadmin
 
 block content
     h1  Strona rodzica 
-    p Witaj ponownie, #{user.imieRodzica} #{user.nazwiskoRodzica} #{user.Uczen_idUcznia} !
+    p Witaj ponownie, #{user.imieRodzica} #{user.nazwiskoRodzica} !
+    p E-mail: #{user.EmailRodzica}
+    p Dane dziecka:
+    p Imie: #{user.imieUcznia}
+    p Nazwisko: #{user.nazwiskoUcznia}
+    p E-mail: #{user.EmailUcznia}
+    P Klasa: #{user.Klasa_nazwaKlasy} 
     //https://www.youtube.com/watch?v=9Y_xHn2gHWY
     
     p 
