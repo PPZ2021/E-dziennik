@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function (req, res, next) {
   req.session.loggedin = false;
   req.session.username = '';
-  res.redirect('/index');
+  res.redirect('/login');
 });
 
 
