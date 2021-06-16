@@ -2,8 +2,11 @@ extends layoutlogin
 
 block content
     div.login-form
-        h1 Login to panel
+        h1 Zaloguj się do E-Dziennika
         form(action='auth', method='POST')
             input(type="text", name="username", placeholder="Username", required)
             input(type="password", name="password", placeholder="Password", required)
             input(type='submit', value="Login")
+    
+block footer 
+    

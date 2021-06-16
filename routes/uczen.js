@@ -20,47 +20,20 @@ router.get('/', function (req, res, next) {
         res.send('db error');
         return true;
       }
-      let pages = [];
-      console.log(rows[0]);
-      res.render('uczen', { username: req.session.username, pagesList: pages,user:rows[0] });
+      
+      console.log('row: ' + JSON.stringify(rows[0]));
+      dataBase.query(`SELECT * FROM Uczen LEFT JOIN Oceny USING (idUcznia) WHERE idUcznia = ?`, [req.session.userid], function (error, rows) {
+        
+      });
+      res.render('uczen', { username: req.session.username,user:rows[0] });
     });
     //db.close();
-
+    
   } else {
     res.send('Please login to view this page!');
   }
 
   //res.end();
-});
-
-router.get('/edit/:page', function (req, res, next) {
-  if (req.session.loggedin) {
-    res.render('edit', { pagename: req.params.page });
-  } else {
-    res.send('Please login to view this page!');
-  }
-});
-
-router.post('/edit/:page', function (req, res, next) {
-  if (req.session.loggedin) {
-    let page = req.params.page;
-    console.log(req)
-    const sqlite3 = require('sqlite3').verbose();
-    let db = new sqlite3.Database('db.sqlite');
-    db.run(`UPDATE pages SET content = ? WHERE name == ? `, [req.body.myDoc, page], function (error, row) {
-      if (error) {
-        console.error(error.message);
-        res.send('db error');
-        return true;
-      }
-    });
-    db.close();
-
-    res.redirect(`/admin/edit/${page}`)
-    //res.render('edit', { pagename: req.params.page });
-  } else {
-    res.send('Please login to view this page!');
-  }
 });
 
 module.exports = router;

@@ -7,7 +7,6 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 
 
-var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var authRouter = require('./routes/auth');
 var uczenRouter = require('./routes/uczen');
@@ -65,12 +64,13 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-/*
-app.get('/', function(req, res) {
+
+/*app.get('/', function(req, res) {
   res.send('Hello World!');
 });
 app.listen(3000, function() {
   console.log('Example app listening on port 3000!');
 });
 */
+
 module.exports = app;
