@@ -13,8 +13,6 @@ var uczenRouter = require('./routes/uczen');
 var rodzicRouter = require('./routes/rodzic');
 var nauczycielRouter = require('./routes/nauczyciel');
 var logoutRouter = require('./routes/logout');
-var loadRouter = require('./routes/load');
-var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -39,14 +37,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', loginRouter);
-app.use('/users', usersRouter);
 app.use('/login', loginRouter)
 app.use('/auth', authRouter)
 app.use('/uczen', uczenRouter)
 app.use('/rodzic', rodzicRouter)
 app.use('/nauczyciel', nauczycielRouter)
 app.use('/logout', logoutRouter)
-app.use('/load', loadRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
