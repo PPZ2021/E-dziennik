@@ -1,9 +1,85 @@
 extends layoutadmin
 
 block content
-    h1  Strona nauczyciela
-    p Witaj ponownie,  #{user.imieNauczyciela}  #{user.nazwiskoNauczyciela} !
-    p E-mail: #{user.EmailNauczyciela} 
-    //https://www.youtube.com/watch?v=9Y_xHn2gHWY
-    
-    p 
+  .container
+    .py-5.text-center
+      h2 eDziennik
+      p.lead eDziennik zalozony na potrzeby projektu z PPZ WIT 2020/2021
+    .row
+      .col-md-5.order-md-2.mb-4
+        h4.d-flex.justify-content-between.align-items-center.mb-3
+          span.text-muted Twoje dzialania
+        ul.list-group.mb-3
+          li.list-group-item.d-flex.justify-content-between.lh-condensed
+            div
+              h6.my-0 Wybierz przedmiot
+            span.text-muted
+              .container.mt-3.p-1
+                select.form-control.w-700
+                  option(hidden='') Przedmiot
+                  option Polski
+                  option Matematyka
+                  option Angielski
+                  option WF
+          li.list-group-item.d-flex.justify-content-between.lh-condensed
+            div
+              h6.my-0 Wybierz klas&eogon;
+            span.text-muted
+              .container.mt-3.p-1
+                select.form-control
+                  option(hidden='') Klasa
+                  option II B
+                  option IO1
+                  option IV C
+                  option P03
+          li.list-group-item.d-flex.justify-content-between.lh-condensed
+            div
+              h6.my-0 Wybierz ucznia
+            div.text-muted
+              .container.p-0
+                select.form-control
+                  option(hidden='') Uczen
+                  option John Kowalsky
+                  option Arnold Szwarceneger
+                  option Bruce Lee
+                  option Listonosz Pat
+          li.list-group-item.d-flex.justify-content-between.lh-condensed
+            div
+              .my-2.px-1
+                .input-group
+                  input.form-control(type='text' placeholder='Ocena np: 4.5')
+            span.text-muted.my-1.px-1
+              .grades
+                button.btn.btn-secondary.btn-block.mt-1.p-2(type='submit') Dodaj ocen&eogon;
+                button.btn.btn-secondary.btn-block.mt-1.p-2(type='submit') Zmie&nacute; ocen&eogon;
+                button.btn.btn-secondary.btn-block.mt-1.p-2(type='submit') Usu&nacute; ocen&eogon;
+          li.list-group-item.d-flex.lh-condensed
+              div
+                .input-group-append
+                  button.btn.btn-secondary(type='submit') Potwierd&zacute;
+      .col-md-7.order-md-1
+        h4.mb-3 Profil Nauczyciela
+        .row
+          .col-md-6.mb-3
+            label(for='imieNauczyciela') Imi&eogon;
+            p.text-secondary #{user.imieNauczyciela}
+          .col-md-6.mb-3
+            label(for='nazwiskoNauczyciela') Nazwisko
+            p.text-secondary #{user.nazwiskoNauczyciela}
+        .row
+          .col-md-6.mb-3
+            label(for='EmailNauczyciela') eMail
+            p.text-secondary #{user.EmailNauczyciela}
+          .col-md-6.mb-3
+            label(for='nrTelefonuNauczyciela') nr tel.
+            p.text-secondary #{user.nrTelefonuNauczyciela}
+        .mb-3
+          label(for='address') Przedmioty
+          p.text-secondary #{user.przedmiotyNauczyciela}
+        .mb-3
+          label(for='address2') Klasy
+          p.text-secondary #{user.klasyNauczyciela}
+        hr.mb-4
+  footer.my-5.pt-5.text-muted.text-center.text-small.fixed-bottom.text-center.justify-content-center
+    p.mb-1
+      | 2020-2021 Adam Nowali&nacute;ski, Daniel Pi&eogon;tka, Krzysztof Kalbarczyk, Jakub Kwiatkowski, Jakub Sza&lstrok;wicki
