@@ -43,7 +43,11 @@ router.get('/', function (req, res, next) {
           console.log(key);
           var sum = 0;
           value.forEach(function(val){sum+=val});
-          srednie.set(key, sum/value.length);
+          sr = sum/value.length;
+          sr = sr*100;
+          sr = Math.round(sr);
+          sr = sr/100;
+          srednie.set(key, sr);
         });
         var sredniaRoczna = 0;
         srednie.forEach(function(value, key){
@@ -52,6 +56,9 @@ router.get('/', function (req, res, next) {
         });
         if(sredniaRoczna > 0){
           sredniaRoczna = sredniaRoczna/srednie.size;
+          sredniaRoczna *= 100;
+          sredniaRoczna = Math.round(sredniaRoczna);
+          sredniaRoczna /= 100;
         }
         console.log(srednie);
         console.log(sredniaRoczna);
