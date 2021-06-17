@@ -57,7 +57,7 @@ router.post('/edit/:page', function (req, res, next) {
     });
     db.close();
 
-    res.redirect(`/admin/edit/${page}`)
+    res.redirect(`/admin/edit/${page}`) 
     //res.render('edit', { pagename: req.params.page });
   } else {
     res.send('Please login to view this page!');
