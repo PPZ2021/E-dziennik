@@ -13,7 +13,6 @@ const dataBase = mysql.createConnection({
 router.get('/', function (req, res, next) {
   if (req.session.loggedin && req.session.role == RODZIC) {
     console.log(req.session.userid);
-    //dataBase.query(`SELECT * FROM Rodzic WHERE idRodzica = ?`, [req.session.userid], function (error, rows) {
     dataBase.query(`SELECT * FROM Rodzic join Uczen USING (idUcznia) where idRodzica = ?`, [req.session.userid], function (error, rows) {
       if (error) {
         console.error(error.message);
@@ -21,47 +20,51 @@ router.get('/', function (req, res, next) {
         res.send('db error');
         return true;
       }
-      let pages = [];
-      console.log(rows[0]);
-      res.render('rodzic', { username: req.session.username, pagesList: pages,user:rows[0] });
+      
+      console.log('row: ' + JSON.stringify(rows[0]));
+      dataBase.query(`SELECT * FROM Oceny WHERE idUcznia = ?`, [rows[0].idUcznia], function (error, rowsO) {
+        if (error) {
+          console.error(error.message);
+          console.error(error);
+          res.send('db error');
+          return true;
+        }
+        var listaOcen = new Map();
+        for(var i = 0; i < rowsO.length; i++){
+          var r = rowsO[i];
+          var rec = listaOcen.get(r['nazwaPrzedmiotu']);
+          if(!rec) rec = new Array();
+          rec.push(r['ocena']);
+          listaOcen.set(r['nazwaPrzedmiotu'], rec);  
+        }
+        var srednie = new Map();
+        listaOcen.forEach(function(value, key){
+          console.log(value);
+          console.log(key);
+          var sum = 0;
+          value.forEach(function(val){sum+=val});
+          srednie.set(key, sum/value.length);
+        });
+        var sredniaRoczna = 0;
+        srednie.forEach(function(value, key){
+          console.log(value);
+          sredniaRoczna+=value;
+        });
+        if(sredniaRoczna > 0){
+          sredniaRoczna = sredniaRoczna/srednie.size;
+        }
+        console.log(srednie);
+        console.log(sredniaRoczna);
+        res.render('rodzic', { username: req.session.username,user:rows[0], oceny: listaOcen, srednie: srednie, sredniaRoczna: sredniaRoczna });
+      });
     });
     //db.close();
-
+    
   } else {
     res.send('Please login to view this page!');
   }
 
   //res.end();
-});
-
-router.get('/edit/:page', function (req, res, next) {
-  if (req.session.loggedin) {
-    res.render('edit', { pagename: req.params.page });
-  } else {
-    res.send('Please login to view this page!');
-  }
-});
-
-router.post('/edit/:page', function (req, res, next) {
-  if (req.session.loggedin) {
-    let page = req.params.page;
-    console.log(req)
-    const sqlite3 = require('sqlite3').verbose();
-    let db = new sqlite3.Database('db.sqlite');
-    db.run(`UPDATE pages SET content = ? WHERE name == ? `, [req.body.myDoc, page], function (error, row) {
-      if (error) {
-        console.error(error.message);
-        res.send('db error');
-        return true;
-      }
-    });
-    db.close();
-
-    res.redirect(`/admin/edit/${page}`)
-    //res.render('edit', { pagename: req.params.page });
-  } else {
-    res.send('Please login to view this page!');
-  }
 });
 
 module.exports = router;
