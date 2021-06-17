@@ -42,6 +42,7 @@ app.use('/auth', authRouter)
 app.use('/uczen', uczenRouter)
 app.use('/rodzic', rodzicRouter)
 app.use('/nauczyciel', nauczycielRouter)
+app.use('/nauczyciel/*', nauczycielRouter)
 app.use('/logout', logoutRouter)
 
 // catch 404 and forward to error handler
