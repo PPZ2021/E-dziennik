@@ -8,12 +8,14 @@ function listClasses() {
     if (!subject) {
         var x = document.getElementById("classes");
         x.innerHTML = '';
+        var y = document.getElementById("name");
+        y.innerHTML = '';
         return;
     }
     fetch(`/nauczyciel/przedmiot/${subject}`).then(function (response) {
         return response.json();
     }).then(function (myJson) {
-        console.log(myJson)
+        //console.log(myJson)
         var x = document.getElementById("classes");
         x.innerHTML = '';
         var option = document.createElement("option");
@@ -43,33 +45,31 @@ function listName() {
     var f = document.getElementById('subject');
     let subject = f.value;
 
-
     fetch(`/nauczyciel/przedmiot/${subject}/klasa/${class_}`).then(function (response) {
         return response.json();
+        //return JSON.stringify(response);
     }).then(function (myJson) {
-        console.log(myJson)
+        //console.log(myJson)
+        var keys = myJson.ke;
+        var values = myJson.va;
+        /*
+        for(var i=0; i< keys.length; i++){
+            console.log(keys[i] + ": " + values[i]);
+        }
+        */
 
-        myJson.foreach(function (value, key) {
-            console.log(key + ": " + value);
-        })
-        /*
-        for(var [key, value] of myJson.students){
-            console.log(key + ": " + value);
-          }
-        /*
         var x = document.getElementById("name");
         x.innerHTML='';
         var option = document.createElement("option");
         option.text = '';
         option.value = '';
         x.add(option);
-        for(var i=0; i<myJson.classes.length;i++){
-            var el = myJson.classes[i];
+        for(var i=0; i< keys.length; i++){
             var option = document.createElement("option");
-            option.text = el;
-            option.value = el;
+            option.text = values[i];
+            option.value = keys[i];
             x.add(option);
-        }*/
+        }
     });
 }
 

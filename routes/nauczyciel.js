@@ -28,7 +28,7 @@ router.get('/', function (req, res, next) {
           res.send('db error');
           return true;
         }
-        console.log('rowO: ' + JSON.stringify(rowsO));
+        //console.log('rowO: ' + JSON.stringify(rowsO));
 
         var subject = new Map()
         for (var i = 0; i < rowsO.length; i++) {
@@ -60,7 +60,7 @@ router.get('/przedmiot/:subject', function (req, res, next) {
         res.send('db error');
         return true;
       }
-      console.log("class: " + JSON.stringify(rows))
+      //console.log("class: " + JSON.stringify(rows))
 
       res.send({ classes: rows });
     })
@@ -71,12 +71,7 @@ router.get('/przedmiot/:subject', function (req, res, next) {
 
 router.get('/przedmiot/:subject/klasa/:class_', function (req, res, next) {
   if (req.session.loggedin && req.session.role == NAUCZYCIEL) {
-    /*
-    console.log("rrrrrrr " + req.params);
-    console.log("rrrrrrr " + req.params.subject);
-    console.log("rrrrrrr " + req.params.class_);
-    */
-   
+
     dataBase.query(`SELECT idUcznia, imieUcznia, nazwiskoUcznia FROM Uczen JOIN Przedmiot USING(nazwaKlasy) WHERE (idNauczyciela = ? AND nazwaPrzedmiotu = ? AND nazwaKlasy = ?) ORDER BY(nazwiskoUcznia);`, [req.session.userid, req.params.subject, req.params.class_], function (error, rows) {
       if (error) {
         console.error(error.message);
@@ -85,17 +80,16 @@ router.get('/przedmiot/:subject/klasa/:class_', function (req, res, next) {
         return true;
       }
 
-      var uczen = new Map();
+      var keys = new Array(rows.length);
+      var values = new Array(rows.length);
+
       for (var i = 0; i < rows.length; i++) {
         var row = rows[i];
-        uczen.set(row.idUcznia, "" + row.nazwiskoUcznia + ' ' + row.imieUcznia)
+        keys[i] = row.idUcznia;
+        values[i] = "" + row.nazwiskoUcznia + ' ' + row.imieUcznia;
       }
-      /*
-      for(var [key, value] of uczen){
-        console.log(key + ": " + value);
-      }*/
 
-      res.send({ st: uczen });
+      res.send({ ke: keys, va: values });
     })
   } else {
     res.send('Please login to view this page!');
@@ -111,8 +105,23 @@ router.post('/ocena', function (req, res, next) {
       res.send('Incorrect values!');
       return;
     }
+    /*
+    dataBase.query(`SELECT ocena FROM Oceny WHERE (nazwaKlasy = ? AND nazwaPrzedmiotu = ? AND idUcznia = ?  AND kryterium = ?);`, [body.classes, body.subject, body.name, body.criteria], function (error, rows) {
+      if (error) {
+        console.error(error.message);
+        console.error(error);
+        res.send('db error');
+        return true;
+      }
+      console.log(rows);
+      if (rows) {
+        res.send('Value already exist!');
+        return;
+      }
+    });
+    */
 
-    dataBase.query(`INSERT INTO Oceny nazwaKlasy = ?, nazwaPrzedmiotu = ?, idUcznia = ?, kryterium = ?, ocena = ?;`, [body.classes, body.subject, body.name, body.criteria, body.score], function (error, rows) {
+    dataBase.query(`INSERT INTO Oceny (nazwaKlasy, nazwaPrzedmiotu, idUcznia, kryterium, ocena) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE ocena = ?;`, [body.classes, body.subject, body.name, body.criteria, body.score, body.score], function (error, rowsO) {
       if (error) {
         console.error(error.message);
         console.error(error);
